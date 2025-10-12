@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wishify — Make every wish unforgettable ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Wishify — Create beautiful personalized birthday websites for your loved ones. Fast. Cute. Shareable." />
+  <style>
+    :root{
+      --bg1: #fff0fb;
+      --accent1: #ff6fcf; /* pink */
+      --accent2: #8a60ff; /* purple */
+      --muted:#6b6b6b;
+      --card:#ffffff;
+      --glass: rgba(255,255,255,0.7);
+      --container:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Poppins,system-ui,Arial;background:linear-gradient(180deg,var(--bg1),#fff);margin:0;color:#222;overflow-x:hidden}
+    a{color:inherit}
+    .site{max-width:var(--container);margin:0 auto;padding:28px}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;padding:8px 0;position:relative;z-index:30}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-family:Great Vibes, cursive;font-size:26px;box-shadow:0 8px 30px rgba(138,96,255,0.15)}
+    nav a{margin-left:18px;text-decoration:none;color:var(--muted);font-weight:600}
+
+    /* Hero */
+    .hero{display:flex;gap:32px;align-items:center;padding:36px 0;position:relative}
+    .hero-left{flex:1;z-index:20}
+    .kicker{display:inline-block;background:linear-gradient(90deg,#fff1f8,#f7f2ff);padding:6px 10px;border-radius:999px;font-weight:600;color:var(--accent2);font-size:13px}
+    h1{font-family:Great Vibes, cursive;font-size:48px;margin:12px 0;color:#3a154d}
+    p.lead{color:#4b4b4b;margin:6px 0 18px;max-width:560px}
+
+    .cta{display:flex;gap:12px}
+    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;box-shadow:0 10px 30px rgba(138,96,255,0.18);display:inline-flex;align-items:center;gap:10px}
+    .btn.ghost{background:transparent;border:2px solid rgba(0,0,0,0.06);color:#3b3b3b}
+
+    .hero-right{flex:1;z-index:20}
+    .preview{background:linear-gradient(180deg,rgba(255,255,255,0.85),#fff);border-radius:16px;padding:18px;box-shadow:0 18px 50px rgba(47,22,75,0.06)}
+    .card-preview{width:100%;height:420px;border-radius:12px;background:linear-gradient(180deg,#fff,#fff6fb);display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed rgba(0,0,0,0.03);position:relative;overflow:hidden}
+
+    /* Floating confetti & balloons canvas sits behind everything */
+    #fxCanvas{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:5}
+
+    /* Features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:26px 0}
+    .feature{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(90,30,80,0.03);transform-origin:center;transition:transform .35s}
+    .feature:hover{transform:translateY(-6px)}
+
+    /* Templates */
+    .templates{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    .tpl{border-radius:16px;overflow:hidden;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg,#fff,#fff);position:relative}
+    .tpl img{width:100%;height:220px;object-fit:cover;display:block}
+    .tpl .meta{padding:14px}
+
+    /* Testimonials */
+    .testimonials{margin:26px 0;display:flex;gap:12px;align-items:center}
+    .test-card{flex:1;padding:16px;border-radius:12px;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 12px 30px rgba(20,8,40,0.04)}
+
+    /* Pricing */
+    .pricing{display:flex;gap:12px;margin:22px 0}
+    .price-card{flex:1;padding:18px;border-radius:12px;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 12px 40px rgba(90,30,80,0.04);border:1px solid rgba(0,0,0,0.03);transition:transform .25s}
+    .price-card:hover{transform:translateY(-8px)}
+    .price{font-size:24px;font-weight:800;color:var(--accent2)}
+
+    /* FAQ */
+    .faq{margin:18px 0}
+    .faq-item{border-radius:10px;padding:12px;border:1px solid rgba(0,0,0,0.04);margin-bottom:8px}
+    .faq-q{display:flex;justify-content:space-between;cursor:pointer}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s;padding-top:0}
+
+    /* Order section */
+    .order{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .order .big{flex:1;padding:18px;border-radius:14px;background:linear-gradient(90deg,rgba(255,111,207,0.08),rgba(138,96,255,0.06));box-shadow:0 12px 30px rgba(138,96,255,0.06)}
+
+    footer{margin-top:36px;padding:26px 0;border-top:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:space-between}
+
+    /* Floating balloons (small DOM elements animated) */
+    .balloon{position:absolute;border-radius:50%;opacity:0.95;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+
+    @media (max-width:1000px){
+      .hero{flex-direction:column}
+      .features{grid-template-columns:1fr}
+      .templates{grid-template-columns:1fr}
+      .pricing{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <!-- celebration canvas for confetti -->
+  <canvas id="fxCanvas"></canvas>
+
+  <div class="site">
+    <header>
+      <div class="brand">
+        <div class="logo">
+        	<img src="logo.jpeg" alt="Wishify Logo" style="width:64px; height:64px; border-radius:14px;">
+        </div>
+        <div>
+          <div style="font-weight:700">Wishify</div>
+          <div style="font-size:12px;color:var(--muted)">Make every wish unforgettable ✨</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#how">How</a>
+        <a href="#templates">Templates</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#order">Order</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-left">
+          <div class="kicker">Personalized birthday websites</div>
+          <h1>Turn wishes into tiny web pages — instantly</h1>
+          <p class="lead">Create a beautiful, shareable website for someone's birthday. Add photos, videos, messages, music and a custom message — share the link and watch their smile.</p>
+
+          <div class="cta">
+            <a class="btn" href="#order" id="orderBtn">Order Now</a>
+            <a class="btn ghost" href="#templates">See Templates</a>
+          </div>
+
+          <div style="margin-top:18px;color:var(--muted);font-size:13px">Follow us <a href="https://instagram.com/wishify.me" target="_blank" rel="noopener noreferrer">@wishify.me</a> • <a href="mailto:wishify.me@gmail.com">wishify.me@gmail.com</a></div>
+        </div>
+
+        <div class="hero-right">
+          <div class="preview">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Live example</div>
+            <div class="card-preview" id="demoCard">
+              <div style="text-align:center;padding:18px;max-width:420px">
+                <div style="font-family:Great Vibes;font-size:34px;color:var(--accent2)">Happy Birthday, Dear ✨</div>
+                <p class="muted">A tiny website with photos, wishes, a music background and a special message.</p>
+                <div style="margin-top:12px">
+  <small class="muted">
+    <a href="https://wishifytest.netlify.app" target="_blank" rel="noopener noreferrer" style="color: var(--accent2); text-decoration: underline;">
+      wishifytest.netlify.app
+    </a>
+  </small>
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- decorative balloons (inserted by JS) -->
+      </section>
+
+      <section id="how">
+        <h2>How Wishify works</h2>
+        <div class="features">
+          <div class="feature">
+            <strong>Personalized Design</strong>
+            <p class="muted">We design a tiny website tailored to the person — colors, photos, fonts and a sweet message.</p>
+          </div>
+          <div class="feature">
+            <strong>Music & Media</strong>
+            <p class="muted">Add background music or a video message to make it emotional.</p>
+          </div>
+          <div class="feature">
+            <strong>Share Instantly</strong>
+            <p class="muted">You get a short, shareable link that looks beautiful on phones and social apps.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="templates">
+        <h2>Templates we love</h2>
+        <div class="templates">
+          <div class="tpl">
+            <img src="Basic.png" alt="template 1">
+            <div class="meta">
+              <div style="font-weight:700">Basic Template</div>
+              <div class="muted" style="font-size:13px">Static page with up to 6 photos and a message.</div>
+            </div>
+          </div>
+          <div class="tpl">
+            <img src="Premium.png">
+            <div class="meta">
+              <div style="font-weight:700">Photo Album</div>
+              <div class="muted" style="font-size:13px">Gallery-first layout for memories</div>
+            </div>
+          </div>
+          <div class="tpl">
+            <img src="Ultimate.png">
+            <div class="meta">
+              <div style="font-weight:700">Minimal Music</div>
+              <div class="muted" style="font-size:13px">Clean template with background music</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonials">
+        <div class="test-card">
+          <strong>“She cried happy tears — the page was perfect.”</strong>
+          <p class="muted">— Riya, Mumbai</p>
+        </div>
+        <div class="test-card">
+          <strong>“Fast delivery & beautiful design.”</strong>
+          <p class="muted">— Rohit, Delhi</p>
+        </div>
+        <div class="test-card">
+          <strong>“Everyone asked where I made it — 10/10.”</strong>
+          <p class="muted">— Kavya, Bangalore</p>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <h2>Pricing</h2>
+        <div class="pricing">
+          <div class="price-card">
+            <div style="font-weight:700">Basic</div>
+            <div class="price">₹249</div>
+            <p class="muted">Static page with up to 6 photos and a message. Delivery: 24 hrs</p>
+          </div>
+          <div class="price-card">
+            <div style="font-weight:700">Premium</div>
+            <div class="price">₹499</div>
+            <p class="muted">Music, animations & custom domain. Delivery: 48 hrs</p>
+          </div>
+          <div class="price-card">
+            <div style="font-weight:700">Ultimate</div>
+            <div class="price">₹899</div>
+            <p class="muted">Video message + priority support. Delivery: 72 hrs</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq">
+        <h2>FAQ</h2>
+        <div class="faq-item">
+          <div class="faq-q">What do you need from me?<span>+</span></div>
+          <div class="faq-a">Photos, recipient name, your message, and optional song/video.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Can I request changes?<span>+</span></div>
+          <div class="faq-a">Yes — small edits are included in every plan.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How do I order?<span>+</span></div>
+          <div class="faq-a">Use the buttons below to message us on Instagram or email us directly.</div>
+        </div>
+      </section>
+
+      <section id="order">
+        <h2>Ready to surprise someone?</h2>
+        <div class="order">
+          <div class="big">
+            <p class="muted">Tap a button to connect with us — we'll take it from there and create a beautiful, shareable page.</p>
+            <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+              <a class="btn" href="https://instagram.com/wishify.me" target="_blank" rel="noopener noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Order via Instagram
+              </a>
+              <a class="btn" href="mailto:wishify.me@gmail.com">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.5v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7.5l-9 6-9-6" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Order via Email
+              </a>
+            </div>
+          </div>
+
+          <div style="min-width:280px;max-width:380px">
+            <div style="padding:18px;border-radius:12px;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 10px 30px rgba(20,8,40,0.04)">
+              <div style="font-weight:700">Quick order (prefill)</div>
+              <p class="muted" style="font-size:13px">Click to open Instagram or email with a sample message.</p>
+              <div style="margin-top:10px;display:flex;gap:8px">
+                <button class="btn" id="igPrefill">Instagram</button>
+                <button class="btn" id="emailPrefill">Email</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div>
+        <div style="font-weight:700">
+        	<img src="logo.jpeg" alt="Wishify Logo" style="width:64px; height:64px; border-radius:14px;">
+        </div>
+        <div style="font-size:13px;color:var(--muted)">Bring smiles, one webpage at a time.</div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <a href="https://instagram.com/wishify.me" target="_blank" rel="noopener noreferrer" style="margin-right:12px">@wishify.me</a>
+        <a href="mailto:wishify.me@gmail.com">wishify.me@gmail.com</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /* ========== Confetti & animation logic ========== */
+    // Canvas confetti minimal implementation
+    (function(){
+      const canvas = document.getElementById('fxCanvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = window.innerWidth;
+      let H = canvas.height = window.innerHeight;
+      const confetti = [];
+      const colors = [getComputedStyle(document.documentElement).getPropertyValue('--accent1').trim() || '#ff6fcf', getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim() || '#8a60ff', '#ffd166', '#ff9a9e'];
+
+      function rand(min,max){return Math.random()*(max-min)+min}
+      function makePiece(){
+        return {
+          x: rand(0,W),
+          y: rand(-H,0),
+          vx: rand(-1,1),
+          vy: rand(2,6),
+          size: Math.floor(rand(6,14)),
+          rot: rand(0,Math.PI*2),
+          vr: rand(-0.1,0.1),
+          color: colors[Math.floor(rand(0,colors.length))]
+        }
+      }
+      for(let i=0;i<45;i++) confetti.push(makePiece());
+
+      function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize);
+
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for(let i=0;i<confetti.length;i++){
+          const p = confetti[i];
+          p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+          p.vy += 0.03; // gravity
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+          ctx.restore();
+          if(p.y > H + 20){ confetti[i] = makePiece(); confetti[i].y = -20; }
+        }
+        requestAnimationFrame(update);
+      }
+      update();
+
+      // small burst when clicking order
+      function burst(x,y,count){
+        for(let i=0;i<count;i++){
+          confetti.push({x:x,y:y,vx:rand(-6,6),vy:rand(-8,2),size:Math.floor(rand(6,12)),rot:rand(0,Math.PI*2),vr:rand(-0.2,0.2),color:colors[Math.floor(rand(0,colors.length))]});
+        }
+      }
+
+      // Attach bursts to the Order Now and demoCard clicks
+      document.getElementById('orderBtn').addEventListener('click',function(e){
+        const x = window.innerWidth/2; const y = window.innerHeight/3; burst(x,y,40);
+      });
+      document.getElementById('demoCard').addEventListener('click',function(e){
+        const rect = this.getBoundingClientRect(); burst(rect.left + rect.width/2, rect.top + rect.height/3, 30);
+      });
+
+    })();
+
+    /* ========== Floating balloons (DOM) ========== */
+    (function(){
+      const colors = ['rgba(255,111,207,0.95)','rgba(138,96,255,0.95)','rgba(255,209,102,0.95)'];
+      const root = document.body;
+      const count = 8;
+      for(let i=0;i<count;i++){
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        const size = 60 + Math.random()*80;
+        b.style.width = size + 'px'; b.style.height = size*1.2 + 'px';
+        b.style.left = Math.random()*100 + 'vw';
+        b.style.bottom = -Math.random()*200 - 80 + 'px';
+        b.style.background = colors[i%colors.length];
+        b.style.opacity = 0.95;
+        b.style.zIndex = 10 + i;
+        root.appendChild(b);
+        animateBalloon(b);
+      }
+      function animateBalloon(el){
+        const delay = Math.random()*4;
+        const duration = 16 + Math.random()*18;
+        const startLeft = parseFloat(el.style.left);
+        el.animate([
+          {transform: `translateY(0)`, left: startLeft + 'vw', opacity: 0.95},
+          {transform: `translateY(-110vh)`, left: (startLeft + (Math.random()*12-6)) + 'vw', opacity: 0.6}
+        ],{duration:duration*1000, iterations: Infinity, delay: delay*1000});
+      }
+    })();
+
+    /* ========== FAQ toggle ========== */
+    (function(){
+      document.querySelectorAll('.faq-item').forEach(function(item){
+        const q = item.querySelector('.faq-q');
+        const a = item.querySelector('.faq-a');
+        q.addEventListener('click',function(){
+          if(a.style.maxHeight && a.style.maxHeight !== '0px'){ a.style.maxHeight = '0px'; q.querySelector('span').textContent = '+'; }
+          else{ a.style.maxHeight = a.scrollHeight + 'px'; q.querySelector('span').textContent = '−'; }
+        });
+      });
+    })();
+
+    /* ========== Prefill actions for quick order ========== */
+    document.getElementById('igPrefill').addEventListener('click',function(){
+      // Instagram doesn't support prefilled messages via URL for all devices; we'll open the profile
+      window.open('https://instagram.com/wishify.me','_blank');
+      // small confetti
+      document.getElementById('orderBtn').click();
+    });
+    document.getElementById('emailPrefill').addEventListener('click',function(){
+      const subject = encodeURIComponent('Wishify Order — Quick Request');
+      const body = encodeURIComponent('Hi Wishify team,%0D%0A%0D%0AI would like to order a Wishify page. Here are the details:%0D%0A%0D%0ARecipient name: %0D%0AFavorite photos (links or attachments): %0D%0AMessage to include:%0D%0APreferred delivery date:%0D%0AContact (WhatsApp):%0D%0A%0D%0AThanks,%0D%0A[Your name]');
+      window.location.href = `mailto:wishify.me@gmail.com?subject=${subject}&body=${body}`;
+    });
+
+  </script>
+</body>
+</html>
