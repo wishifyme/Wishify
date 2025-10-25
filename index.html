@@ -63,7 +63,7 @@
     .faq{margin:18px 0}
     .faq-item{border-radius:10px;padding:12px;border:1px solid rgba(0,0,0,0.04);margin-bottom:8px}
     .faq-q{display:flex;justify-content:space-between;cursor:pointer;user-select:none}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-top:0}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-top:0;color:#4b4b4b;line-height:1.6}
     .faq-a.open{padding-top:10px}
 
     .order{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
@@ -380,7 +380,7 @@
             a.classList.remove('open');
             icon.textContent = '+';
           } else {
-            a.style.maxHeight = a.scrollHeight + 'px';
+            a.style.maxHeight = (a.scrollHeight + 20) + 'px';
             a.classList.add('open');
             icon.textContent = '−';
           }
