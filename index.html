@@ -34,7 +34,7 @@
     p.lead{color:#4b4b4b;margin:6px 0 18px;max-width:560px}
 
     .cta{display:flex;gap:12px}
-    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;box-shadow:0 10px 30px rgba(138,96,255,0.18);display:inline-flex;align-items:center;gap:10px}
+    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;box-shadow:0 10px 30px rgba(138,96,255,0.18);display:inline-flex;align-items:center;gap:10px;border:none;cursor:pointer}
     .btn.ghost{background:transparent;border:2px solid rgba(0,0,0,0.06);color:#3b3b3b}
 
     .hero-right{flex:1;z-index:20}
@@ -62,14 +62,16 @@
 
     .faq{margin:18px 0}
     .faq-item{border-radius:10px;padding:12px;border:1px solid rgba(0,0,0,0.04);margin-bottom:8px}
-    .faq-q{display:flex;justify-content:space-between;cursor:pointer}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s;padding-top:0}
+    .faq-q{display:flex;justify-content:space-between;cursor:pointer;user-select:none}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-top:0}
+    .faq-a.open{padding-top:10px}
 
     .order{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
     .order .big{flex:1;padding:18px;border-radius:14px;background:linear-gradient(90deg,rgba(255,111,207,0.08),rgba(138,96,255,0.06));box-shadow:0 12px 30px rgba(138,96,255,0.06)}
 
     footer{margin-top:36px;padding:26px 0;border-top:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:space-between}
     .balloon{position:absolute;border-radius:50%;opacity:0.95;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+    .muted{color:var(--muted);font-size:14px}
     @media (max-width:1000px){
       .hero{flex-direction:column}
       .features{grid-template-columns:1fr}
@@ -79,7 +81,6 @@
   </style>
 </head>
 <body>
-  <!-- celebration canvas for confetti -->
   <canvas id="fxCanvas"></canvas>
   <div class="site">
     <header>
@@ -101,28 +102,28 @@
     </header>
     <main>
       <section class="hero">
-  <div class="hero-left">
-    <div class="kicker">Personalized Occasion Websites</div>
-    <h1>Turn wishes into tiny web pages — instantly</h1>
-    <p class="lead">Create a beautiful, shareable website for birthdays, anniversaries, proposals and more. Add photos, music, and messages — share the link and make them smile.</p>
-    <div class="cta">
-      <a class="btn" href="#order" id="orderBtn">Order Now</a>
-      <a class="btn ghost" href="#templates">See Demos</a>
-    </div>
-    <div style="margin-top:18px;color:var(--muted);font-size:13px">
-      Follow us <a href="https://instagram.com/wishify.me" target="_blank" rel="noopener noreferrer">@wishify.me</a> • 
-      <a href="mailto:wishify.me@gmail.com">wishify.me@gmail.com</a>
-    </div>
-  </div>
-  <div class="hero-right" style="flex: 0 0 380px; display: flex; justify-content: flex-end;">
-    <div class="preview" style="width: 340px; padding: 0; margin-left: 24px;">
-      <div style="font-size:13px;color:var(--muted);margin:18px 0 8px 0; text-align:center;">What is wishify</div>
-      <div class="card-preview" style="height:315px; padding:0; background: none; box-shadow:0 8px 30px rgba(47,22,75,0.09); display:flex;align-items:center;justify-content:center;">
-        <img src="detail.png" alt="Live Example" style="width:100%;height:100%;object-fit:cover;border-radius:15px;">
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="hero-left">
+          <div class="kicker">Personalized Occasion Websites</div>
+          <h1>Turn wishes into tiny web pages — instantly</h1>
+          <p class="lead">Create a beautiful, shareable website for birthdays, anniversaries, proposals and more. Add photos, music, and messages — share the link and make them smile.</p>
+          <div class="cta">
+            <a class="btn" href="#order" id="orderBtn">Order Now</a>
+            <a class="btn ghost" href="#templates">See Demos</a>
+          </div>
+          <div style="margin-top:18px;color:var(--muted);font-size:13px">
+            Follow us <a href="https://instagram.com/wishify.me" target="_blank" rel="noopener noreferrer">@wishify.me</a> • 
+            <a href="mailto:wishify.me@gmail.com">wishify.me@gmail.com</a>
+          </div>
+        </div>
+        <div class="hero-right" style="flex: 0 0 380px; display: flex; justify-content: flex-end;">
+          <div class="preview" style="width: 340px; padding: 0; margin-left: 24px;">
+            <div style="font-size:13px;color:var(--muted);margin:18px 0 8px 0; text-align:center;">What is wishify</div>
+            <div class="card-preview" id="demoCard" style="height:315px; padding:0; background: none; box-shadow:0 8px 30px rgba(47,22,75,0.09); display:flex;align-items:center;justify-content:center;">
+              <img src="detail.png" alt="Live Example" style="width:100%;height:100%;object-fit:cover;border-radius:15px;">
+            </div>
+          </div>
+        </div>
+      </section>
       <section id="how">
         <h2>How Wishify Works</h2>
         <div class="features">
@@ -187,15 +188,15 @@
       </section>
       <section class="testimonials">
         <div class="test-card">
-          <strong>“She cried happy tears — the page was perfect.”</strong>
+          <strong>"She cried happy tears — the page was perfect."</strong>
           <p class="muted">— Riya, Mumbai</p>
         </div>
         <div class="test-card">
-          <strong>“Fast delivery & beautiful design.”</strong>
+          <strong>"Fast delivery & beautiful design."</strong>
           <p class="muted">— Rohit, Delhi</p>
         </div>
         <div class="test-card">
-          <strong>“Everyone asked where I made it — 10/10.”</strong>
+          <strong>"Everyone asked where I made it — 10/10."</strong>
           <p class="muted">— Kavya, Bangalore</p>
         </div>
       </section>
@@ -221,15 +222,24 @@
       <section class="faq">
         <h2>FAQ</h2>
         <div class="faq-item">
-          <div class="faq-q">What do you need from me?<span>+</span></div>
+          <div class="faq-q">
+            <span>What do you need from me?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-a">Photos, recipient name, your message, and optional song/video.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q">Can I request changes?<span>+</span></div>
+          <div class="faq-q">
+            <span>Can I request changes?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-a">Yes — small edits are included in every plan.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q">How do I order?<span>+</span></div>
+          <div class="faq-q">
+            <span>How do I order?</span>
+            <span class="faq-icon">+</span>
+          </div>
           <div class="faq-a">Use the buttons below to message us on Instagram or email us directly.</div>
         </div>
       </section>
@@ -276,7 +286,6 @@
     </footer>
   </div>
   <script>
-    // Confetti & balloon animations
     (function(){
       const canvas = document.getElementById('fxCanvas');
       const ctx = canvas.getContext('2d');
@@ -363,9 +372,18 @@
       document.querySelectorAll('.faq-item').forEach(function(item){
         const q = item.querySelector('.faq-q');
         const a = item.querySelector('.faq-a');
+        const icon = q.querySelector('.faq-icon');
         q.addEventListener('click',function(){
-          if(a.style.maxHeight && a.style.maxHeight !== '0px'){ a.style.maxHeight = '0px'; q.querySelector('span').textContent = '+'; }
-          else{ a.style.maxHeight = a.scrollHeight + 'px'; q.querySelector('span').textContent = '−'; }
+          const isOpen = a.classList.contains('open');
+          if(isOpen){
+            a.style.maxHeight = '0px';
+            a.classList.remove('open');
+            icon.textContent = '+';
+          } else {
+            a.style.maxHeight = a.scrollHeight + 'px';
+            a.classList.add('open');
+            icon.textContent = '−';
+          }
         });
       });
     })();
@@ -381,16 +399,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
